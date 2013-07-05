@@ -1,5 +1,5 @@
 # Django settings for superheroTwitter project.
-import os
+import os, django
 
 # calculate paths for joining other paths in a relative format
 

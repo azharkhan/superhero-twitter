@@ -9,26 +9,40 @@
 <body>
   <script src="{{ STATIC_URL }}/js/jquery.min.js"></script>
   <script src="{{ STATIC_URL }}/js/bootstrap.js"></script>
-  <div class="navbar">
-    {% block login %}
-    <a class="brand" href="/">SuperHero Twitter</a>
-    <ul class="nav">
-      <li><a href="/users/">Profiles</a></li>
-      <li><a href="/users/{{ username }}">My Profile</a></li>
-      <li><a href="/tweets">Public Feed</a></li>
-    </ul>
-      <form action="/logout" method="link">
-        <input type="submit" value="Logout" class="btn">
-      </form>
-    {% endblock login %}
-  </div>
+  <div class="container">
+    <div class="navbar">
+      <div class="navbar-inner">
+        {% block login %}
+        <a class="brand" href="/">SuperHero Twitter</a>
+        <!--div class="navbar-form pull-right">
+          <form action="/logout" method="link">
+            <input type="submit" value="Logout" class="btn">
+          </form>
+        </div-->
+        <ul class="nav nav-pills pull-right">
+          <li><a href="/users/">Profiles</a></li>
+          <li><a href="/tweets">Public Feed</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hey, <strong>{{ username }}</strong>!
+            <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="/users/{{ username }}">My Profile</a></li>
+              <li><a href="/logout">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      {% endblock login %}
+    </div>
 
-  <div class="container-narrow">
-    {% block content %}
+    <div class="">
+      {% block content %}
+        
+      {% endblock content %}
       
-    {% endblock content %}
-    
-  </div>
+    </div>
+</div>
 
   <footer>
     <!-- insert footer -->

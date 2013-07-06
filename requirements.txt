@@ -2,3 +2,4 @@ Django
 South
 Pygments
 djangorestframework
+django-bootstrap-toolkit

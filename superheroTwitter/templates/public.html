@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load bootstrap_toolkit %}
+
+{% block content %}
+<div class="">
+  <h3>Tweet!</h3>
+  <p>
+    <form action="/submit" method="post">
+      {% csrf_token %}
+      {{ tweet_form|as_bootstrap }}
+      <input type="hidden" value="{{ next_url }}" name="next_url">
+      <input type="submit" value="Tweet!" class="btn btn-primary">
+    </form>
+  </p>
+</div>
+
+<div>
+  <h3>All Tweets</h1>
+    {% for tweet in tweets %}
+    <div class="wrapper">
+      @{{ tweet.user.username }}
+      <p>
+        {{ tweet.content }}
+      </p>
+    </div>
+    {% endfor %}
+</div>
+  
+{% endblock content %}

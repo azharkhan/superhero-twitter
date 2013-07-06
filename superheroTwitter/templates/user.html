@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block login %}
+    {% with user.username as username %}
+        {{ block.super }}
+    {% endwith %}  
+{% endblock login %}
+
+{% block content %}
+
+<div>
+  <h3>{{ user.get_full_name }}'s Profile</h3>
+  <div class="tweet">
+    @{{ user.username }}
+    <p>
+      {{ tweets.count }} Tweets
+      <span>{{ user.profile.follows.all.count }} Following</span>
+      <span>{{ user.profile.followed_by.all.count }} Followers</span>
+    </p>
+    {% if follow %}
+      <form action="/follow" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="follow" value="{{ user.id }}">
+        <input type="submit" value="Follow" class="btn">
+      </form>
+    {% endif %}
+  </div>
+</div>
+
+<div>
+  <h3>{{ user.first_name}}'s Tweets</h3>
+  {% for tweet in tweets %}
+  <div class="tweet">
+    @{{ tweet.user.username }}
+    <p>{{ tweet.content }}</p>
+  </div>  
+  {% endfor %}
+</div>
+  
+{% endblock content %}

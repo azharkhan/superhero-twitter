@@ -1,10 +1,28 @@
 from django.conf.urls import patterns, include, url
+from twitter_app import views
+from rest_framework import routers
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'tweets', views.TweetViewSet)
+router.register(r'profiles', views.UserProfileViewSet)
+
 urlpatterns = patterns('',
+  url(r'^api/', include(router.urls)),
+  url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+  url(r'^$', 'twitter_app.views.index'),
+  url(r'^login$', 'twitter_app.views.login_view'),
+  url(r'^logout$', 'twitter_app.views.logout_view'),
+  url(r'^signup$', 'twitter_app.views.signup'),
+  url(r'^submit$', 'twitter_app.views.submit'),
+  url(r'^users/$', 'twitter_app.views.users'),
+  url(r'^users/(?P<username>\w{0,30})/$', 'twitter_app.views.users'),
+  url(r'^follow$', 'twitter_app.views.follow'),
+  url(r'^tweets$', 'twitter_app.views.public_tweets'),
     # Examples:
     # url(r'^$', 'superheroTwitter.views.home', name='home'),
     # url(r'^superheroTwitter/', include('superheroTwitter.foo.urls')),

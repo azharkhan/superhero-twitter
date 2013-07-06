@@ -19,4 +19,5 @@ class UserProfile(models.Model):
   user = models.OneToOneField(User)
   follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False)
 
+# create profile when called from model using property
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])

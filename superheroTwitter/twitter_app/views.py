@@ -65,7 +65,8 @@ def signup(request):
       login(request, user)
       return redirect('/')
     else:
-      return index(request, new_user_form=new_user_form)
+      # return index(request, user_form=new_user_form)
+      return render(request, 'home.html', {'new_user_form': new_user_form, 'errors': new_user_form.errors.items()})
   return redirect('/')
 
 @login_required

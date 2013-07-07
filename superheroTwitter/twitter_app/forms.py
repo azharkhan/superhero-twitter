@@ -14,13 +14,10 @@ class NewUserForm(UserCreationForm):
   email = forms.EmailField(required=True)
   first_name = forms.CharField(required=True, max_length=30)
   last_name = forms.CharField(required=True, max_length=40)
-  username = forms.CharField(required=True, max_length=20)
-  password1 = forms.CharField(widget=forms.PasswordInput)
-  password2 = forms.CharField(widget=forms.PasswordInput)
 
   class Meta:
     model = User
-    fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2']
+    fields = ['email', 'first_name', 'last_name', 'username',]
 
 class AuthenticateForm(AuthenticationForm):
   username = forms.CharField()

@@ -16,6 +16,9 @@
 
 {% block content %}
 <h3>Want to Signup?</h3>
+{% if new_user_form.errors %}
+  <div class="alert alert-error">Sorry Hotshot, Please correct the following:</div> 
+{% endif %}
 <p>
   <form action="/signup" method="post">
     {% csrf_token %}

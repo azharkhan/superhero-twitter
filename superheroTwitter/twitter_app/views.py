@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
+from django.template import RequestContext
 
 class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()
@@ -28,7 +29,7 @@ def index(request, auth_form=None, user_form=None):
     user = request.user
     tweets_self = Tweet.objects.filter(user = user.id)
     tweets_friends = Tweet.objects.filter(user__userprofile__in = user.profile.follows.all)
-    tweets = tweets_self | tweets_friends
+    tweets = (tweets_self | tweets_friends).order_by('-date_created')
 
     return render(request, 'tweets.html', {'tweet_form': tweet_form, 'user': user, 
                                               'tweets': tweets, 'next_url': '/'})
@@ -78,13 +79,13 @@ def submit(request):
       tweet.save()
       return redirect(next_url)
     else:
-      return public(request, tweet_form)
+      return public_tweets(request, tweet_form)
   return redirect('/')
 
 @login_required
 def public_tweets(request, tweet_form=None):
   tweet_form = tweet_form or TweetForm()
-  tweets = Tweet.objects.all().reverse()
+  tweets = Tweet.objects.all().order_by('-date_created')
   return render(request, 'public.html', 
                 {'tweet_form': tweet_form, 'next_url': '/tweets', 
                 'tweets': tweets, 'username': request.user.username})
@@ -103,8 +104,10 @@ def users(request, username="", tweet_form=None):
       user = User.objects.get(username=username)
     except User.DoesNotExist:
       raise Http404
-    tweets = Tweet.objects.filter(user=user.id) # get tweets from user
-    if username == request.user.username or request.user.profile.follows.filter(user__username=username):
+    tweets = Tweet.objects.filter(user=user.id).order_by('-date_created') # get tweets from user
+    if (username == request.user.username):
+      return render(request, 'user.html', {'user': request.user, 'tweets': tweets})
+    elif request.user.profile.follows.filter(user__username=username):
       return render(request, 'user.html', {'user': user, 'tweets': tweets})
     return render(request, 'user.html', {'user': user, 'tweets': tweets, 'follow':True})
 
@@ -124,6 +127,18 @@ def follow(request):
       try:
         user = User.objects.get(id=follow_id)
         request.user.profile.follows.add(user.profile)
+      except ObjectDoesNotExist:
+        return redirect('/users')
+    return redirect('/users')
+
+@login_required
+def unfollow(request):
+  if request.method == "POST":
+    unfollow_id = request.POST.get('follow', False)
+    if unfollow_id:
+      try:
+        user = User.objects.get(id=unfollow_id)
+        request.user.profile.follows.remove(user.profile)
       except ObjectDoesNotExist:
         return redirect('/users')
     return redirect('/users')

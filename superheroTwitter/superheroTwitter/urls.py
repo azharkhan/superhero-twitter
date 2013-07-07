@@ -22,6 +22,7 @@ urlpatterns = patterns('',
   url(r'^users/$', 'twitter_app.views.users'),
   url(r'^users/(?P<username>\w{0,30})/$', 'twitter_app.views.users'),
   url(r'^follow$', 'twitter_app.views.follow'),
+  url(r'^unfollow$', 'twitter_app.views.unfollow'),
   url(r'^tweets$', 'twitter_app.views.public_tweets'),
     # Examples:
     # url(r'^$', 'superheroTwitter.views.home', name='home'),

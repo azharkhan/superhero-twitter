@@ -22,18 +22,35 @@
         <input type="hidden" name="follow" value="{{ user.id }}">
         <input type="submit" value="Follow" class="btn">
       </form>
+    {% else %}
+      <form action="/unfollow" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="follow" value="{{ user.id }}">
+        <input type="submit" value="Unfollow" class="btn">
+      </form>
     {% endif %}
   </div>
 </div>
 
-<div>
-  <h3>{{ user.first_name}}'s Tweets</h3>
-  {% for tweet in tweets %}
-  <div class="tweet">
-    @{{ tweet.user.username }}
-    <p>{{ tweet.content }}</p>
-  </div>  
-  {% endfor %}
+<div class="row-fluid">
+  <div class="span12">
+    <h3>{{ user.first_name}}'s Tweets</h3>
+    {% for tweet in tweets %}
+      <div class="row-fluid well">
+        <div class="span2">
+        <a href="/users/{{tweet.user.username}}">@{{ tweet.user.username }}</a>
+        </div>
+        <div class="span3 pull-right">
+            {{ tweet.date_created | timesince}} ago
+        </div>
+        <div class="row-fluid">
+          <div class="span12">
+            {{ tweet.content }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 </div>
   
 {% endblock content %}

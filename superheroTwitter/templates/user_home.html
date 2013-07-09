@@ -7,14 +7,36 @@
 {% endblock login %}
 
 {% block content %}
+<div class="profile">
+  <div class="row-fluid">
+      <div class="span6">
+        <h3>{{user.get_full_name}} (@{{user.username}})</h3>
+      </div>
+      <!--div class="span2 pull-right">
+        <p class="btn">
+        <a href="/logout">Logout</a>
+        </p>
+      </div-->
+    </div>
+    <div class="row-fluid">
+      <div class="span2">
+        {{ user.tweet_set.count}} Tweets
+      </div>
+      <div class="span2 offset2">
+        {{ user.profile.follows.count }} Following
+      </div>
+      <div class="span2 offset2">
+        {{ user.profile.followed_by.count }} Followers
+      </div>
+    </div>
+  </div>
+</div>
 <div class="jumbotron">
-  <h3>Tweet Away!</h3>
   {% include "tweet_box.html" %}
 </div>
 
 <div class="row-fluid">
   <div class="span12">
-    <h3>Your Feed</h3>
     <div id="tweets">
       {% include "tweets.html" %}
     </div>

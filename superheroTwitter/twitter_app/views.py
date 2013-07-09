@@ -154,3 +154,14 @@ def unfollow(request):
     return render(request, 'user_home.html', {'user': request.user, 
                                         'tweets': get_tweets(request.user), 
                                         'tweet_form': TweetForm(),})
+
+@login_required
+def search_users(request):
+  if request.method == "POST":
+    username = request.POST['search_text']
+  else:
+    username = ''
+
+  users = User.objects.filter(username__contains=username)
+
+  return render(request, 'search_results.html', {'users': users})

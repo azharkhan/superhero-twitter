@@ -1,0 +1,12 @@
+.header {
+  background-color: #1c8dcd;
+  height: 35px;
+  text-align: center;
+  font: small-caps 24px/36px "Helvetica", Sans-Serif;
+  color: #fff;
+}
+
+.profile {
+  background-color: #f7f7f9;
+  padding: 0px 10px;
+}

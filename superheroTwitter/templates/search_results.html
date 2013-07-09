@@ -1,0 +1,11 @@
+{% if users.count > 0 %}
+
+{% for user in users %}
+  <li><a href="/users/{{user.username}}/">{{user.username}}</a></li>
+{% endfor %}
+
+{% else %}
+
+<li>No Such Hero!</li>
+
+{% endif %}

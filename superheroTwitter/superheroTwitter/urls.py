@@ -24,6 +24,7 @@ urlpatterns = patterns('',
   url(r'^follow$', 'twitter_app.views.follow'),
   url(r'^unfollow$', 'twitter_app.views.unfollow'),
   url(r'^tweets$', 'twitter_app.views.all_tweets'),
+  url(r'^search$', 'twitter_app.views.search_users'),
     # Examples:
     # url(r'^$', 'superheroTwitter.views.home', name='home'),
     # url(r'^superheroTwitter/', include('superheroTwitter.foo.urls')),

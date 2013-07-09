@@ -5,24 +5,24 @@
 
   <h3>Sign In</h3>
 
-  <form action="/login" method="post">
+  <form action="/login" class="form-inline" method="post">
     {% csrf_token %}
-    {{ auth_form|as_bootstrap }}
-
-    <input type="submit" class="btn" value="Log In">
+    {% bootstrap_form auth_form layout="inline" %}
+      <input type="submit" class="btn btn-primary" value="Log In">
   </form>
   
 {% endblock login %}
 
 {% block content %}
-<h3>Want to Signup?</h3>
+<h3>Aren't Part of the League? Sign Up Here!</h3>
 {% if new_user_form.errors %}
   <div class="alert alert-error">Sorry Hotshot, Please correct the following:</div> 
 {% endif %}
 <p>
   <form action="/signup" method="post">
     {% csrf_token %}
-    {{ new_user_form|as_bootstrap }}
+    {# {{ new_user_form|as_bootstrap }} #}
+    {% bootstrap_form new_user_form %}
     <input type="submit" class="btn btn-primary" value="Sign Up!">
   </form>
 </p>

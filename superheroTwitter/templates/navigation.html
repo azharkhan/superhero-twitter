@@ -1,20 +1,22 @@
-<div class="navbar">
+<div class="navbar navbar">
   <div class="navbar-inner">
         {% block login %}
         <a class="brand" href="/">SuperHero Twitter</a>
 
         <ul class="nav nav-pills pull-right">
+          <li><a href="/">My Feed</a></li>
           <li><a href="/users/">Profiles</a></li>
           <li><a href="/tweets">Public Feed</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hey, <strong>{{username }}</strong>!
-            <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="/users/{{ username }}">My Profile</a></li>
-              <li><a href="/logout">Logout</a></li>
+          <form class="navbar-search pull-left dropdown">
+            {% csrf_token %}
+            <input type="text" class="search-query" id="search" placeholder="Search">
+          </form>
+          <!--li class="dropdown"-->
+            <ul id="search-results" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              {% include 'search_results.html' %}
             </ul>
-          </li>
+          <!--/li-->
+          <li><a href="/logout">Logout</a></li>
         </ul>
   </div>
     {% endblock login %}

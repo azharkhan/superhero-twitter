@@ -4,7 +4,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 class TweetForm(forms.ModelForm):
-  content = forms.CharField(required=True, widget=forms.Textarea(attrs={'rows': 4, 'class': 'field span12',}))
+  content = forms.CharField(required=True, label='', widget=forms.Textarea(attrs={
+                                              'rows': 4, 
+                                              'class': 'field span12',
+                                              'placeholder': 'Enter Tweet Here...',}))
 
   class Meta:
     model = Tweet

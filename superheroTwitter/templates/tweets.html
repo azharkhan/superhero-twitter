@@ -1,43 +1,16 @@
-{% extends "base.html" %}
-{% load bootstrap_toolkit %}
-
-{% block login %}
-  {% with user.username as username %}
-      {{ block.super }}
-  {% endwith %}
-{% endblock login %}
-
-{% block content %}
-<div class="jumbotron">
-  <h3>Tweet Away!</h3>
-  <p>
-    <form action="/submit" method="post">
-      {% csrf_token %}
-      {{ tweet_form|as_bootstrap }}
-      <input type="hidden" value="{{ next_url }}" name="next_url">
-      <input type="submit" class= "btn btn-primary" value="Tweet!">
-    </form>
-  </p>
-</div>
-
-<div class="row-fluid">
-  <div class="span12">
-    <h3>Your Feed</h3>
-    {% for tweet in tweets %}
-      <div class="row-fluid well">
-        <div class="span2">
-        <a href="/users/{{tweet.user.username}}">@{{ tweet.user.username }}</a>
-        </div>
-        <div class="span3 pull-right">
-            {{ tweet.date_created | timesince}} ago
-        </div>
-        <div class="row-fluid">
-          <div class="span12">
-            {{ tweet.content }}
-          </div>
-        </div>
+{% for tweet in tweets %}
+  <div class="row-fluid well">
+    <div class="span2">
+    <a href="/users/{{tweet.user.username}}">@{{ tweet.user.username }}</a>
+    </div>
+    <div class="span3 pull-right">
+        {{ tweet.date_created | timesince}} ago
+    </div>
+    <div class="row-fluid">
+      <div class="span12">
+        {{ tweet.content }}
       </div>
-    {% endfor %}
+    </div>
   </div>
-</div>
-{% endblock content %}
+{% endfor %}
+

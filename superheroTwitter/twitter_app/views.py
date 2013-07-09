@@ -23,15 +23,13 @@ class UserProfileViewSet(viewsets.ModelViewSet):
   queryset = UserProfile.objects.all()
   serializer_class = UserProfileSerializer
 
-def index(request, auth_form=None, user_form=None):
+def user_home(request, auth_form=None, user_form=None):
   if request.user.is_authenticated():
     tweet_form = TweetForm()
     user = request.user
-    tweets_self = Tweet.objects.filter(user = user.id)
-    tweets_friends = Tweet.objects.filter(user__userprofile__in = user.profile.follows.all)
-    tweets = (tweets_self | tweets_friends).order_by('-date_created')
+    tweets = get_tweets(user)
 
-    return render(request, 'tweets.html', {'tweet_form': tweet_form, 'user': user, 
+    return render(request, 'user_home.html', {'tweet_form': tweet_form, 'user': user, 
                                               'tweets': tweets, 'next_url': '/'})
   else:
     auth_form = auth_form or AuthenticateForm()
@@ -47,7 +45,7 @@ def login_view(request):
       login(request, form.get_user())
       return redirect('/')
     else:
-      return index(request, auth_form=form)
+      return user_home(request, auth_form=form)
   return redirect('/')
 
 def logout_view(request):
@@ -78,20 +76,29 @@ def submit(request):
       tweet = tweet_form.save(commit=False)
       tweet.user = request.user
       tweet.save()
-      return redirect(next_url)
+      return render(request, 'tweets.html', {'tweets': get_tweets(request.user),})
     else:
-      return public_tweets(request, tweet_form)
+      return all_tweets(request, tweet_form)
   return redirect('/')
 
+
+# show a public feed for all tweets in system
 @login_required
-def public_tweets(request, tweet_form=None):
+def all_tweets(request, tweet_form=None):
   tweet_form = tweet_form or TweetForm()
   tweets = Tweet.objects.all().order_by('-date_created')
   return render(request, 'public.html', 
                 {'tweet_form': tweet_form, 'next_url': '/tweets', 
                 'tweets': tweets, 'username': request.user.username})
 
-# get latest tweets
+# get all tweets & friend's tweets for user
+def get_tweets(user):
+  tweets_self = Tweet.objects.filter(user = user.id)
+  tweets_friends = Tweet.objects.filter(user__userprofile__in = user.profile.follows.all)
+  tweets = (tweets_self | tweets_friends).order_by('-date_created')
+  return tweets
+
+# get latest tweet for a user (to show in profile)
 def get_latest(user):
   try:
     return user.tweet_set.order_by('-id')[0]
@@ -109,8 +116,8 @@ def users(request, username="", tweet_form=None):
     if (username == request.user.username):
       return render(request, 'user.html', {'user': request.user, 'tweets': tweets})
     elif request.user.profile.follows.filter(user__username=username):
-      return render(request, 'user.html', {'user': user, 'tweets': tweets})
-    return render(request, 'user.html', {'user': user, 'tweets': tweets, 'follow':True})
+      return render(request, 'user.html', {'user': user, 'tweets': tweets, 'type': "friend"})
+    return render(request, 'user.html', {'user': user, 'tweets': tweets, 'type': "public"})
 
   users = User.objects.all().annotate(tweet_count=Count('tweet'))
   tweets = map(get_latest, users)
@@ -130,7 +137,9 @@ def follow(request):
         request.user.profile.follows.add(user.profile)
       except ObjectDoesNotExist:
         return redirect('/users')
-    return redirect('/users')
+    return render(request, 'user_home.html', {'user': request.user, 
+                                        'tweets': get_tweets(request.user), 
+                                        'tweet_form': TweetForm(),})
 
 @login_required
 def unfollow(request):
@@ -142,4 +151,6 @@ def unfollow(request):
         request.user.profile.follows.remove(user.profile)
       except ObjectDoesNotExist:
         return redirect('/users')
-    return redirect('/users')
+    return render(request, 'user_home.html', {'user': request.user, 
+                                        'tweets': get_tweets(request.user), 
+                                        'tweet_form': TweetForm(),})

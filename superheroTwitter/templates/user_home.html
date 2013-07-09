@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block login %}
+  {% with user.username as username %}
+      {{ block.super }}
+  {% endwith %}
+{% endblock login %}
+
+{% block content %}
+<div class="jumbotron">
+  <h3>Tweet Away!</h3>
+  {% include "tweet_box.html" %}
+</div>
+
+<div class="row-fluid">
+  <div class="span12">
+    <h3>Your Feed</h3>
+    <div id="tweets">
+      {% include "tweets.html" %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

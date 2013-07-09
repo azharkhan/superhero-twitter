@@ -1,0 +1,9 @@
+{% load bootstrap_toolkit %}
+<p>
+    <form action="/submit" method="post" id="tweet_form">
+      {% csrf_token %}
+      {{ tweet_form|as_bootstrap }}
+      <input type="hidden" value="{{ next_url }}" name="next_url">
+      <input type="submit" value="Tweet!" class="btn btn-primary">
+    </form>
+  </p>

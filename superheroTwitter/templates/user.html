@@ -16,13 +16,13 @@
       <span>{{ user.profile.follows.all.count }} Following</span>
       <span>{{ user.profile.followed_by.all.count }} Followers</span>
     </p>
-    {% if follow %}
+    {% if type == "public" %} <!-- user is not followed/self then show follow button -->
       <form action="/follow" method="post">
         {% csrf_token %}
         <input type="hidden" name="follow" value="{{ user.id }}">
         <input type="submit" value="Follow" class="btn">
       </form>
-    {% else %}
+    {% elif type == "friend" %} <!-- user is being followed, show unfollow button -->
       <form action="/unfollow" method="post">
         {% csrf_token %}
         <input type="hidden" name="follow" value="{{ user.id }}">
@@ -35,21 +35,9 @@
 <div class="row-fluid">
   <div class="span12">
     <h3>{{ user.first_name}}'s Tweets</h3>
-    {% for tweet in tweets %}
-      <div class="row-fluid well">
-        <div class="span2">
-        <a href="/users/{{tweet.user.username}}">@{{ tweet.user.username }}</a>
-        </div>
-        <div class="span3 pull-right">
-            {{ tweet.date_created | timesince}} ago
-        </div>
-        <div class="row-fluid">
-          <div class="span12">
-            {{ tweet.content }}
-          </div>
-        </div>
-      </div>
-    {% endfor %}
+    <div id="tweets">
+    {% include "tweets.html" %}
+    </div>
   </div>
 </div>
   

@@ -1,0 +1,21 @@
+<div class="navbar">
+  <div class="navbar-inner">
+        {% block login %}
+        <a class="brand" href="/">SuperHero Twitter</a>
+
+        <ul class="nav nav-pills pull-right">
+          <li><a href="/users/">Profiles</a></li>
+          <li><a href="/tweets">Public Feed</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hey, <strong>{{username }}</strong>!
+            <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="/users/{{ username }}">My Profile</a></li>
+              <li><a href="/logout">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+  </div>
+    {% endblock login %}
+</div>

@@ -119,14 +119,6 @@ def users(request, username="", tweet_form=None):
       return render(request, 'user.html', {'user': user, 'tweets': tweets, 'type': "friend"})
     return render(request, 'user.html', {'user': user, 'tweets': tweets, 'type': "public"})
 
-  users = User.objects.all().annotate(tweet_count=Count('tweet'))
-  tweets = map(get_latest, users)
-  obj = zip(users, tweets)
-  tweet_form = tweet_form or TweetForm()
-  return render(request, 'profiles.html', {'obj':obj, 'next_url': '/users', 
-                                            'tweet_form': tweet_form,
-                                            'username': request.user.username })
-
 @login_required
 def follow(request):
   if request.method == "POST":

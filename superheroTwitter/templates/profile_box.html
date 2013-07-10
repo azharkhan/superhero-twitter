@@ -1,0 +1,36 @@
+<div class="profile">
+  <div class="row-fluid">
+    <div class="span2 avi">
+      <img src="http://placekitten.com/150/150" />
+      </div>
+      <div class="span2">
+        <h3>{{user.get_full_name}} <a class="muted" href="/users/{{user.username}}">@{{user.username}}</a></p></h3>
+      </div>
+      <div class="counts">
+        <div class="span2">
+          <p class="muted"><em>{{ user.tweet_set.count }} Tweets</em></p>
+        </div>
+        <div class="span2">
+          <p class="muted"><em>{{ user.profile.follows.count }} Following</em></p>
+        </div>
+        <div class="span2">
+          <p class="muted"><em>{{ user.profile.followed_by.count }} Followers</em></p>
+        </div>
+      </div>
+      <div class="span2">
+    {% if type == "public" %} <!-- user is not followed/self then show follow button -->
+      <form action="/follow" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="follow" value="{{ user.id }}">
+        <input type="submit" value="Follow" class="btn btn-success">
+      </form>
+    {% elif type == "friend" %} <!-- user is being followed, show unfollow button -->
+      <form action="/unfollow" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="follow" value="{{ user.id }}">
+        <input type="submit" value="Unfollow" class="btn btn-danger">
+      </form>
+    {% endif %}
+    </div>      
+    </div>
+  </div>

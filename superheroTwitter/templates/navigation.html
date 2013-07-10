@@ -1,11 +1,10 @@
-<div class="navbar navbar">
+<div class="navbar navbar-inverse">
   <div class="navbar-inner">
         {% block login %}
         <a class="brand" href="/">SuperHero Twitter</a>
 
         <ul class="nav nav-pills pull-right">
           <li><a href="/">My Feed</a></li>
-          <li><a href="/users/">Profiles</a></li>
           <li><a href="/tweets">Public Feed</a></li>
           <form class="navbar-search pull-left dropdown">
             {% csrf_token %}

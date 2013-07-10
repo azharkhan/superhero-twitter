@@ -7,30 +7,7 @@
 
 {% block content %}
 
-<div>
-  <h3>{{ user.get_full_name }}'s Profile</h3>
-  <div class="tweet">
-    @{{ user.username }}
-    <p>
-      {{ tweets.count }} Tweets
-      <span>{{ user.profile.follows.all.count }} Following</span>
-      <span>{{ user.profile.followed_by.all.count }} Followers</span>
-    </p>
-    {% if type == "public" %} <!-- user is not followed/self then show follow button -->
-      <form action="/follow" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="follow" value="{{ user.id }}">
-        <input type="submit" value="Follow" class="btn">
-      </form>
-    {% elif type == "friend" %} <!-- user is being followed, show unfollow button -->
-      <form action="/unfollow" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="follow" value="{{ user.id }}">
-        <input type="submit" value="Unfollow" class="btn">
-      </form>
-    {% endif %}
-  </div>
-</div>
+{% include "profile_box.html" %}
 
 <div class="row-fluid">
   <div class="span12">
